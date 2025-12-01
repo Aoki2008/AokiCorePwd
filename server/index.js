@@ -48,7 +48,25 @@ app.post('/api/projects', async (req, res) => {
 app.delete('/api/projects/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        await prisma.account.deleteMany({ where: { projectId: Number(id) } }); // Delete associated accounts first
+        // 1. Unlink accounts in trash (set projectId to null)
+        await prisma.account.updateMany({
+            where: {
+                projectId: Number(id),
+                deletedAt: { not: null }
+            },
+            data: { projectId: null }
+        });
+
+        // 2. Delete active accounts (or move to trash if desired, but current logic was hard delete)
+        // We stick to hard deleting active accounts as per original logic, but now trash items are safe.
+        await prisma.account.deleteMany({
+            where: {
+                projectId: Number(id),
+                deletedAt: null
+            }
+        });
+
+        // 3. Delete the project
         await prisma.project.delete({ where: { id: Number(id) } });
         res.json({ message: 'Project deleted' });
     } catch (error) {

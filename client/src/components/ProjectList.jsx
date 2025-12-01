@@ -3,17 +3,22 @@ import { Folder, Trash2 } from 'lucide-react';
 
 const ProjectList = ({ projects, selectedProjectId, onSelectProject, onDeleteProject }) => {
     return (
-        <div className="space-y-2">
+        <div className="space-y-1">
             {projects.map((project) => (
                 <div
                     key={project.id}
-                    className={`group flex items-center justify-between p-3 rounded-md cursor-pointer transition-colors ${selectedProjectId === project.id ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50 text-gray-700'
-                        }`}
+                    className={`
+                        group flex items-center justify-between px-3 py-2 rounded-md cursor-pointer transition-colors
+                        ${selectedProjectId === project.id
+                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }
+                    `}
                     onClick={() => onSelectProject(project.id)}
                 >
-                    <div className="flex items-center gap-3 truncate">
-                        <Folder size={18} />
-                        <span className="font-medium truncate">{project.name}</span>
+                    <div className="flex items-center gap-3 overflow-hidden">
+                        <Folder size={18} className={selectedProjectId === project.id ? 'fill-current' : ''} />
+                        <span className="truncate font-medium">{project.name}</span>
                     </div>
                     <button
                         onClick={(e) => {
@@ -27,7 +32,7 @@ const ProjectList = ({ projects, selectedProjectId, onSelectProject, onDeletePro
                 </div>
             ))}
             {projects.length === 0 && (
-                <div className="text-center text-gray-400 py-4 text-sm">
+                <div className="text-center text-gray-400 dark:text-gray-500 py-4 text-sm">
                     暂无项目
                 </div>
             )}

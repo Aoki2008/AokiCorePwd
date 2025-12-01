@@ -20,8 +20,8 @@ model Project {
 
 model Account {
   id        Int      @id @default(autoincrement())
-  projectId Int
-  project   Project  @relation(fields: [projectId], references: [id])
+  projectId Int?
+  project   Project? @relation(fields: [projectId], references: [id])
   name      String
   data      String   // Storing custom fields as a JSON string
   createdAt DateTime @default(now())

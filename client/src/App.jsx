@@ -5,6 +5,7 @@ import AccountList from './components/AccountList';
 import AccountForm from './components/AccountForm';
 import RecycleBin from './components/RecycleBin';
 import api from './lib/api';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   const [projects, setProjects] = useState([]);
@@ -119,39 +120,41 @@ function App() {
   };
 
   return (
-    <Router>
-      <Layout
-        projects={projects}
-        selectedProjectId={selectedProjectId}
-        onSelectProject={setSelectedProjectId}
-        onAddProject={handleAddProject}
-        onDeleteProject={handleDeleteProject}
-        currentView={currentView}
-        onSelectView={setCurrentView}
-      >
-        {currentView === 'trash' ? (
-          <RecycleBin />
-        ) : selectedProjectId ? (
-          <AccountList
-            accounts={accounts}
-            onAddAccount={handleAddAccount}
-            onEditAccount={handleEditAccount}
-            onDeleteAccount={handleDeleteAccount}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            请选择或创建一个项目以开始
-          </div>
-        )}
+    <ThemeProvider>
+      <Router>
+        <Layout
+          projects={projects}
+          selectedProjectId={selectedProjectId}
+          onSelectProject={setSelectedProjectId}
+          onAddProject={handleAddProject}
+          onDeleteProject={handleDeleteProject}
+          currentView={currentView}
+          onSelectView={setCurrentView}
+        >
+          {currentView === 'trash' ? (
+            <RecycleBin />
+          ) : selectedProjectId ? (
+            <AccountList
+              accounts={accounts}
+              onAddAccount={handleAddAccount}
+              onEditAccount={handleEditAccount}
+              onDeleteAccount={handleDeleteAccount}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-gray-500">
+              请选择或创建一个项目以开始
+            </div>
+          )}
 
-        <AccountForm
-          isOpen={isAccountFormOpen}
-          onClose={() => setIsAccountFormOpen(false)}
-          onSubmit={handleAccountSubmit}
-          initialData={editingAccount}
-        />
-      </Layout>
-    </Router>
+          <AccountForm
+            isOpen={isAccountFormOpen}
+            onClose={() => setIsAccountFormOpen(false)}
+            onSubmit={handleAccountSubmit}
+            initialData={editingAccount}
+          />
+        </Layout>
+      </Router>
+    </ThemeProvider>
   );
 }
 

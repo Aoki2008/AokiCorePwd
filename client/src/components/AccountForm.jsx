@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 
+
 const AccountForm = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     const [name, setName] = useState('');
     const [fields, setFields] = useState([{ key: '', value: '' }]);
@@ -46,83 +47,85 @@ const AccountForm = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-                <div className="flex items-center justify-between p-4 border-b">
-                    <h2 className="text-xl font-semibold text-gray-800">
-                        {initialData ? '编辑账号' : '新建账号'}
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md overflow-hidden border dark:border-gray-700">
+                <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-700/50">
+                    <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+                        {initialData ? '编辑账户' : '添加账户'}
                     </h2>
-                    <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                        <X size={24} />
+                    <button onClick={onClose} className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                        <X size={20} />
                     </button>
                 </div>
-
                 <form onSubmit={handleSubmit} className="p-4 space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">账号名称</label>
+                        <label htmlFor="accountName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            账户名称
+                        </label>
                         <input
                             type="text"
-                            required
-                            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="例如：Google, Netflix, AWS"
+                            id="accountName"
+                            className="w-full px-3 py-2 border dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            required
+                            placeholder="例如：Google 账号"
                         />
                     </div>
 
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                            <label className="block text-sm font-medium text-gray-700">自定义字段</label>
-                            <button
-                                type="button"
-                                onClick={addField}
-                                className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
-                            >
-                                <Plus size={14} /> 添加字段
-                            </button>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            自定义字段
+                        </label>
+                        <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                            {fields.map((field, index) => (
+                                <div key={index} className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        placeholder="字段名"
+                                        className="flex-1 px-3 py-2 border dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                                        value={field.key}
+                                        onChange={(e) => handleFieldChange(index, 'key', e.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="字段值"
+                                        className="flex-1 px-3 py-2 border dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                                        value={field.value}
+                                        onChange={(e) => handleFieldChange(index, 'value', e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeField(index)}
+                                        className="p-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-
-                        {fields.map((field, index) => (
-                            <div key={index} className="flex gap-2 items-start">
-                                <input
-                                    type="text"
-                                    placeholder="字段名"
-                                    className="w-1/3 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                                    value={field.key}
-                                    onChange={(e) => handleFieldChange(index, 'key', e.target.value)}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="值"
-                                    className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                                    value={field.value}
-                                    onChange={(e) => handleFieldChange(index, 'value', e.target.value)}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => removeField(index)}
-                                    className="p-2 text-gray-400 hover:text-red-500"
-                                    tabIndex={-1}
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            </div>
-                        ))}
+                        <button
+                            type="button"
+                            onClick={addField}
+                            className="mt-3 flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
+                        >
+                            <Plus size={16} className="mr-1" /> 添加字段
+                        </button>
                     </div>
 
-                    <div className="pt-4 flex justify-end gap-3">
+                    <div className="pt-4 border-t dark:border-gray-700 flex justify-end gap-3">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
                         >
                             取消
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
                         >
-                            {initialData ? '保存修改' : '创建账号'}
+                            保存
                         </button>
                     </div>
                 </form>
