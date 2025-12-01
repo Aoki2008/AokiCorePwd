@@ -1,0 +1,15 @@
+node_modules/
+.env
+*.db
+*.db-journal
+dist/
+.DS_Store
+.idea/
+.vscode/
+*.log
+coverage/
+build/
+.gemini/
+.agent/
+brain/
+artifacts/
