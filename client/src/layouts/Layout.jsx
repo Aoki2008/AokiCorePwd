@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout as LayoutIcon, Plus, Trash2, Sun, Moon, Monitor, Menu, X } from 'lucide-react';
+import { Layout as LayoutIcon, Plus, Trash2, Sun, Moon, Monitor, Menu, X, RefreshCw } from 'lucide-react';
 import ProjectList from '../components/features/ProjectList';
 import { useTheme } from '../context/ThemeContext';
 
-const Layout = ({ children, projects, onSelectProject, onAddProject, onDeleteProject, selectedProjectId, currentView, onSelectView }) => {
+const Layout = ({ children, projects, onSelectProject, onAddProject, onDeleteProject, selectedProjectId, currentView, onSelectView, onRefresh }) => {
     const { theme, setTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const toggleTheme = () => {
         if (theme === 'light') setTheme('dark');
         else if (theme === 'dark') setTheme('system');
         else setTheme('light');
+    };
+
+    const handleRefresh = async () => {
+        setIsRefreshing(true);
+        await onRefresh();
+        setTimeout(() => setIsRefreshing(false), 500); // Visual feedback
     };
 
     const getThemeIcon = () => {
@@ -32,20 +39,28 @@ const Layout = ({ children, projects, onSelectProject, onAddProject, onDeletePro
             <div
                 className="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 border-b dark:border-gray-700 flex items-center justify-between px-4 z-20"
                 style={{
-                    paddingTop: 'max(env(safe-area-inset-top), 32px)',
-                    height: 'calc(4rem + max(env(safe-area-inset-top), 32px))'
+                    paddingTop: 'env(safe-area-inset-top)',
+                    height: 'calc(4rem + env(safe-area-inset-top))'
                 }}
             >
                 <div className="flex items-center gap-2 font-bold text-gray-800 dark:text-white">
                     <LayoutIcon size={24} />
                     AokiCorePwd
                 </div>
-                <button
-                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                    className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                >
-                    {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={handleRefresh}
+                        className={`p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md ${isRefreshing ? 'animate-spin' : ''}`}
+                    >
+                        <RefreshCw size={20} />
+                    </button>
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                    >
+                        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                </div>
             </div>
 
             {/* Sidebar Overlay */}
@@ -61,13 +76,20 @@ const Layout = ({ children, projects, onSelectProject, onAddProject, onDeletePro
                 fixed md:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 shadow-md flex flex-col border-r dark:border-gray-700 transition-transform duration-200 transform 
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
             `}
-                style={{ paddingTop: 'max(env(safe-area-inset-top), 32px)' }}
+                style={{ paddingTop: 'env(safe-area-inset-top)' }}
             >
                 <div className="p-4 border-b dark:border-gray-700 flex items-center justify-between h-16 md:h-auto">
                     <h1 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                         <LayoutIcon size={24} />
                         AokiCorePwd
                     </h1>
+                    <button
+                        onClick={handleRefresh}
+                        className={`md:block hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md ${isRefreshing ? 'animate-spin' : ''}`}
+                        title="刷新数据"
+                    >
+                        <RefreshCw size={18} />
+                    </button>
                 </div>
 
                 <div className="p-4 border-b dark:border-gray-700">
@@ -122,7 +144,7 @@ const Layout = ({ children, projects, onSelectProject, onAddProject, onDeletePro
             <div
                 className="flex-1 overflow-auto p-4 md:p-8 text-gray-900 dark:text-gray-100 md:pt-8"
                 style={{
-                    paddingTop: 'calc(5rem + max(env(safe-area-inset-top), 32px))'
+                    paddingTop: 'calc(4rem + env(safe-area-inset-top))'
                 }}
             >
                 {children}

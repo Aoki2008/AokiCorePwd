@@ -29,6 +29,8 @@ Visit `http://localhost:5173`.
 
 **Windows Client Build**:
 ```bash
+cd client
+
 # 1. Local Mode (Data stored locally)
 npm run electron:build
 
@@ -38,6 +40,19 @@ npm run electron:build
 # Step 2: Edit VITE_API_URL in .env to point to your server
 # Step 3: Build
 npm run electron:build:remote
+```
+Installer located in `client/dist_electron/`.
+
+**Android Client Build**:
+```bash
+cd client
+
+# 1. Local Mode
+npm run cap:android
+
+# 2. Remote Mode
+# Requires .env configuration (same as above)
+npm run cap:android:remote
 ```
 Installer located in `client/dist_electron/`.
 
@@ -84,9 +99,4 @@ Deploy `client/dist` to any Web Server (e.g., Nginx).
 - **Client**: Electron (Windows), Capacitor (Android)
 - **Database**: IndexedDB (Local), SQLite (Remote)
 
-## Documentation
-See `docs/` directory for details:
-- [Walkthrough](docs/walkthrough.md)
-- [Tasks](docs/task.md)
-- [Implementation Plan](docs/implementation_plan.md)
-- [Isolation Plan](docs/isolation_plan.md)
+

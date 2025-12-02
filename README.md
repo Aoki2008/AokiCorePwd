@@ -30,6 +30,8 @@ npm run dev
 
 **Windows 客户端打包**:
 ```bash
+cd client
+
 # 1. 本地模式 (Local Mode) - 数据存储在本地
 npm run electron:build
 
@@ -44,6 +46,8 @@ npm run electron:build:remote
 
 **Android 客户端打包**:
 ```bash
+cd client
+
 # 1. 本地模式 (Local Mode)
 npm run cap:android
 
@@ -85,9 +89,4 @@ npm run build
 - **客户端**：Electron (Windows), Capacitor (Android)
 - **数据库**：IndexedDB (Local), SQLite (Remote)
 
-## 文档
-详细文档请查看 `docs/` 目录：
-- [开发记录 (Walkthrough)](docs/walkthrough.md)
-- [任务清单 (Tasks)](docs/task.md)
-- [本地模式计划](docs/implementation_plan.md)
-- [架构隔离计划](docs/isolation_plan.md)
+

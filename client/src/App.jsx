@@ -53,6 +53,13 @@ function App() {
     }
   };
 
+  const refreshData = async () => {
+    await fetchProjects();
+    if (selectedProjectId) {
+      await fetchAccounts(selectedProjectId);
+    }
+  };
+
   const handleAddProject = () => {
     setNewProjectName('');
     setIsProjectModalOpen(true);
@@ -144,6 +151,7 @@ function App() {
           onDeleteProject={handleDeleteProject}
           currentView={currentView}
           onSelectView={setCurrentView}
+          onRefresh={refreshData}
         >
           {currentView === 'trash' ? (
             <RecycleBin />
