@@ -1,16 +1,46 @@
 {
   "name": "aokicore-pwd-client",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "main": "electron/main.js",
+  "description": "AokiCore Password Manager - Local Mode",
+  "author": "Aoki",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:dev": "concurrently -k \"cross-env BROWSER=none VITE_IS_ELECTRON=true npm run dev -- -c vite.config.electron.js\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "cross-env VITE_IS_ELECTRON=true vite build -c vite.config.electron.js && electron-builder",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:android": "npm run cap:sync && npx cap open android",
+    "build:remote": "cross-env VITE_DATA_MODE=remote vite build",
+    "electron:build:remote": "cross-env VITE_IS_ELECTRON=true VITE_DATA_MODE=remote vite build -c vite.config.electron.js && electron-builder",
+    "cap:sync:remote": "npm run build:remote && npx cap sync",
+    "cap:android:remote": "npm run cap:sync:remote && npx cap open android"
+  },
+  "build": {
+    "appId": "com.aokicore.pwd",
+    "productName": "AokiCorePwd",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "dependencies": {
+    "@capacitor/status-bar": "^7.0.3",
     "axios": "^1.13.2",
+    "dexie": "^4.2.1",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.555.0",
     "react": "^19.2.0",
@@ -18,17 +48,25 @@
     "react-router-dom": "^7.9.6"
   },
   "devDependencies": {
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
     "@eslint/js": "^9.39.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.22",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^39.2.4",
+    "electron-builder": "^24.13.3",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "wait-on": "^9.0.3"
   }
 }

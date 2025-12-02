@@ -1,58 +1,87 @@
-# AokiCorePwd (English Version)
+# AokiCorePwd
 
-*Note: This document is a translation and may not be updated in real-time.*
+A secure and flexible password manager that supports both local standalone usage and LAN collaboration.
 
-A secure, local account storage application with custom fields and recycle bin functionality.
+[中文版 (Chinese Version)](README.md)
 
 ## Features
-- **Project Management**: Organize accounts into projects.
-- **Account Management**: Store credentials and custom fields (e.g., URLs, Notes).
-- **Recycle Bin**: Soft delete accounts with restore and permanent delete options.
-- **Security**: Data stored locally in SQLite. Passwords masked in UI.
-- **Localization**: Full Chinese (Simplified) interface.
+- **Dual Mode**:
+    - **Local Mode**: Data stored locally in browser (IndexedDB) or Windows client. No backend required, fully offline.
+    - **Remote Mode**: Connects to Node.js backend for LAN synchronization and data sharing.
+- **Multi-Platform**: Web (Browser), Windows (Electron), Android (Capacitor).
+- **Project Management**: Organize accounts by projects.
+- **Account Management**: Store credentials and custom fields.
+- **Recycle Bin**: Soft delete with restore and permanent delete options.
+- **Security**: Passwords hidden by default.
 
-## Getting Started
+## Quick Start
 
-### Prerequisites
-- Node.js (v18 or higher)
-- npm
+### 1. Local Mode (Recommended for Personal Use)
+No backend configuration needed.
 
-### Installation
+**Web Dev/Preview**:
+```bash
+cd client
+npm install
+npm run dev
+```
+Visit `http://localhost:5173`.
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/Aoki2008/AokiCorePwd.git
-    cd AokiCorePwd
-    ```
+**Windows Client Build**:
+```bash
+# Local Mode
+npm run electron:build
 
-2.  **Setup Backend**:
-    ```bash
-    cd server
-    npm install
-    
-    # Create .env file
-    echo DATABASE_URL="file:./dev.db" > .env
-    
-    # Initialize Database (This creates the dev.db file)
-    npx prisma migrate dev --name init
-    
-    # Start Server
-    node index.js
-    ```
-    Backend runs on `http://localhost:3001`.
+# Remote Mode (Configure VITE_API_URL in .env first)
+npm run electron:build:remote
+```
+Installer located in `client/dist_electron/`.
 
-3.  **Setup Frontend**:
-    ```bash
-    cd ../client
-    npm install
-    npm run dev
-    ```
-    Frontend runs on `http://localhost:5173`.
+**Android Client Build**:
+```bash
+# Local Mode
+npm run cap:android
 
-4.  **Usage**:
-    Open your browser and navigate to `http://localhost:5173`.
+# Remote Mode (Configure VITE_API_URL in .env first)
+npm run cap:android:remote
+```
+
+### 2. Remote/LAN Mode (Recommended for Team/Sync)
+Requires backend service.
+
+**Backend Setup**:
+```bash
+cd server
+npm install
+# Initialize Database
+npx prisma migrate dev --name init
+# Start Server (Default port 3001)
+node index.js
+```
+
+**Frontend Connection**:
+Set environment variables in `client/.env` or during build:
+```bash
+VITE_DATA_MODE=remote
+VITE_API_URL=http://<Server_IP>:3001/api
+```
+
+**Build & Deploy**:
+```bash
+cd client
+npm run build
+```
+Deploy `client/dist` to any Web Server (e.g., Nginx).
 
 ## Tech Stack
-- **Frontend**: React, Vite, Tailwind CSS, Lucide React
-- **Backend**: Node.js, Express, Prisma
-- **Database**: SQLite
+- **Frontend**: React, Vite, Tailwind CSS, Dexie.js (Local DB)
+- **Backend**: Node.js, Express, Prisma (Remote DB)
+- **Client**: Electron (Windows), Capacitor (Android)
+- **Database**: IndexedDB (Local), SQLite (Remote)
+
+## Documentation
+See `docs/` directory for details:
+- [Walkthrough](docs/walkthrough.md)
+- [Tasks](docs/task.md)
+- [Implementation Plan](docs/implementation_plan.md)
+- [Isolation Plan](docs/isolation_plan.md)

@@ -10,7 +10,16 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist_electron
 *.local
+
+# Android
+android/.gradle
+android/local.properties
+android/app/build
+android/app/release
+android/.idea
+
 
 # Editor directories and files
 .vscode/*
