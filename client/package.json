@@ -7,10 +7,12 @@
   "author": "Aoki",
   "scripts": {
     "dev": "vite",
+    "dev:remote": "cross-env VITE_DATA_MODE=remote vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none VITE_IS_ELECTRON=true npm run dev -- -c vite.config.electron.js\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:dev:remote": "concurrently -k \"cross-env BROWSER=none VITE_IS_ELECTRON=true VITE_DATA_MODE=remote npm run dev -- -c vite.config.electron.js\" \"wait-on http://localhost:5173 && electron .\"",
     "electron:build": "cross-env VITE_IS_ELECTRON=true vite build -c vite.config.electron.js && electron-builder",
     "cap:sync": "npm run build && npx cap sync",
     "cap:android": "npm run cap:sync && npx cap open android",

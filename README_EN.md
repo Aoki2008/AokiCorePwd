@@ -29,20 +29,25 @@ Visit `http://localhost:5173`.
 
 **Windows Client Build**:
 ```bash
-# Local Mode
+# 1. Local Mode (Data stored locally)
 npm run electron:build
 
-# Remote Mode (Configure VITE_API_URL in .env first)
+# 2. Remote Mode (Connects to Server)
+# Step 1: Copy config file
+# cp .env.example .env  (Windows: copy .env.example .env)
+# Step 2: Edit VITE_API_URL in .env to point to your server
+# Step 3: Build
 npm run electron:build:remote
 ```
 Installer located in `client/dist_electron/`.
 
 **Android Client Build**:
 ```bash
-# Local Mode
+# 1. Local Mode
 npm run cap:android
 
-# Remote Mode (Configure VITE_API_URL in .env first)
+# 2. Remote Mode
+# Requires .env configuration (same as above)
 npm run cap:android:remote
 ```
 

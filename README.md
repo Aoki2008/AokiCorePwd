@@ -30,20 +30,25 @@ npm run dev
 
 **Windows 客户端打包**:
 ```bash
-# 本地模式 (Local Mode)
+# 1. 本地模式 (Local Mode) - 数据存储在本地
 npm run electron:build
 
-# 远程模式 (Remote Mode) - 需配置 .env 中的 VITE_API_URL
+# 2. 远程模式 (Remote Mode) - 连接服务器
+# 第一步：复制配置文件
+# cp .env.example .env  (Windows: copy .env.example .env)
+# 第二步：修改 .env 中的 VITE_API_URL 为您的服务器地址
+# 第三步：打包
 npm run electron:build:remote
 ```
 生成的安装包位于 `client/dist_electron/`。
 
 **Android 客户端打包**:
 ```bash
-# 本地模式 (Local Mode)
+# 1. 本地模式 (Local Mode)
 npm run cap:android
 
-# 远程模式 (Remote Mode) - 需配置 .env 中的 VITE_API_URL
+# 2. 远程模式 (Remote Mode)
+# 同样需要先配置 .env 文件中的 VITE_API_URL
 npm run cap:android:remote
 ```
 
